@@ -1,0 +1,10 @@
+[project]
+name = "show-up-api"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi[standard]>=0.116.1",
+    "pymongo[srv]>=4.13.2",
+]
