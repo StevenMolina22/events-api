@@ -12,7 +12,6 @@ from datetime import datetime
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
-
 from models import CrawlRequest, CrawlResponse
 
 # Initialize the router
@@ -20,8 +19,6 @@ crawler_router = APIRouter()
 
 # In-memory job store mapping job_id -> status
 jobs: dict[str, str] = {}
-
-
 
 
 def _generate_job_id(spider_name: str) -> str:

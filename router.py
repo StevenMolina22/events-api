@@ -12,17 +12,9 @@ from db import get_db
 from models import EventOut
 from crawler import crawler_router
 
-# Create the main API router
 api_router = APIRouter()
 
-# Include crawler endpoints
 api_router.include_router(crawler_router, tags=["crawler"])
-
-
-@api_router.get("/health")
-async def health_check() -> dict[str, str]:
-    """Health check endpoint to verify API is running."""
-    return {"status": "healthy", "service": "show-up-api"}
 
 
 @api_router.get("/")
@@ -32,6 +24,28 @@ async def root() -> dict[str, str]:
         "name": "Show Up API",
         "description": "Event crawler and data API",
         "version": "0.1.0",
+    }
+
+
+@api_router.get("/health")
+async def health_check() -> dict[str, str]:
+    """Health check endpoint to verify API is running."""
+    return {"status": "healthy", "service": "show-up-api"}
+
+
+@api_router.get("/sources")
+async def get_sources() -> dict[str, Any]:
+    """Get available event sources and their status.
+
+    Returns:
+        Dictionary containing source information and statistics
+    """
+    return {
+        "sources": [
+            {"name": "eventbrite", "status": "active", "last_crawled": None},
+            {"name": "luma", "status": "active", "last_crawled": None},
+        ],
+        "total": 2,
     }
 
 
@@ -142,19 +156,3 @@ async def get_event(api_id: str) -> dict[str, Any]:
         raise HTTPException(
             status_code=500, detail=f"Error processing event data: {str(e)}"
         )
-
-
-@api_router.get("/sources")
-async def get_sources() -> dict[str, Any]:
-    """Get available event sources and their status.
-
-    Returns:
-        Dictionary containing source information and statistics
-    """
-    return {
-        "sources": [
-            {"name": "eventbrite", "status": "active", "last_crawled": None},
-            {"name": "luma", "status": "active", "last_crawled": None},
-        ],
-        "total": 2,
-    }
